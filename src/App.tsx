@@ -1,24 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useRef, useState } from "react";
+import "./App.css";
+import { serviceEndpoint } from "./constants/service";
+import { TableHeader, TableRow } from "./components/TableRow";
 
 function App() {
+  const [records, setRecords] = useState("records");
+  const alreadyRan = useRef(false);
+  useEffect(() => {
+    if (alreadyRan.current === true) {
+      return;
+    }
+
+    fetch(`${serviceEndpoint}/api/records`)
+      .then((response) => {
+        if (!response.ok) {
+          return;
+        }
+
+        console.log(response);
+
+        response
+          .json()
+          .then((data) => {
+            const recs = data.map((item: any) => {
+              return <TableRow key={item.id} item={item} />;
+            });
+            setRecords(recs);
+          })
+          .catch((error) => console.log(`${error}`));
+      })
+      .catch((error) => setRecords(`${error}`));
+
+    return () => {
+      alreadyRan.current = true;
+    };
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <table>
+        <TableHeader />
+        <tbody>{records}</tbody>
+      </table>
     </div>
   );
 }
