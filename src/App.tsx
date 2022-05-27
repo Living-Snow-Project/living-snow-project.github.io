@@ -22,8 +22,17 @@ function App() {
         response
           .json()
           .then((data) => {
-            const recs = data.map((item: any) => {
-              return <TableRow key={item.id} item={item} />;
+            const recs = data.map((item: any, index: any) => {
+              return (
+                <TableRow
+                  style={{
+                    backgroundColor:
+                      index % 2 === 0 ? "lightgrey" : "lightblue",
+                  }}
+                  key={item.id}
+                  item={item}
+                />
+              );
             });
             setRecords(recs);
           })

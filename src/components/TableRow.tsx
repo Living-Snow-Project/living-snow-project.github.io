@@ -4,7 +4,11 @@ import { photosBlobStorageEndpoint } from "../constants/service";
 function TableHeader() {
   return (
     <thead>
-      <tr>
+      <tr
+        style={{
+          backgroundColor: "grey",
+        }}
+      >
         <td>Date</td>
         <td>Name</td>
         <td>Type</td>
@@ -45,7 +49,7 @@ function TableRow(props: any) {
   );
 
   return (
-    <tr>
+    <tr style={props.style}>
       <td>{props.item.date}</td>
       <td>{`${name}`}</td>
       <td>{props.item.type}</td>
